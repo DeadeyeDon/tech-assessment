@@ -12,31 +12,63 @@ namespace CSharp.Controllers
 	[Route("[controller]")]
 	public class OrderController : ControllerBase
 	{ 
+		// Created as an example without knowing database information
 	        private static List<Order> orders = new List<Order> {
-            		new Order { ID = 1, customerName = "Dude",   },
-            		new Order { Id= 2, Name = "Batman"    },
-            		new Order { Id= 3, Name = "Spiderman" }
+            		new Order { ID = 1, customerName = "Dude", itemSKU = "SKU1", itemQty = 2, itemPrice = 13.00, currencyCode = "USD", status = "ACTIVE" },
+            		new Order { ID = 2, customerName = "Dudette", itemSKU = "SKU47", itemQty = 1, itemPrice = 50.00, currencyCode = "CAD", status = "CANCELLED" }
         	};
 		
 		[HttpGet]
 		public ActionResult<List<Order>> Get()
 		{
-			return "Success!";
+			return Ok(orders.OrderBy(x => x.customerName));
 		}
 		
 		[HttpPost]
 		public ActionResult Create(Order newOrder)
 		{
-		    var existingSuperheroItem = Superheroes.Find(x => x.Id == superheroItem.Id)
-		    if (existingSuperheroItem != null)
+		    var doesOrderExist = orders.Find(x => x.ID == newOrder.ID)
+		    if (doesOrderExist != null)
 		    {
-			return Conflict("Cannot create the Id because it already exists.");
+			return Conflict("Order already exists.");
 		    }
 		    else
 		    {
-			Superheroes.Add(superheroItem);
-			var resourceUrl = Request.Path.ToString() + '/' + superheroItem.Id;
-			return Created(resourceUrl, superheroItem);
+			orders.Add(newOrder);
+			var resourceUrl = Request.Path.ToString() + '/' + newOrder.ID;
+			return Created(resourceUrl, newOrder);
+		    }
+		}
+		
+
+		[HttpDelete]
+		[Route("{Id}")]
+		public ActionResult Delete(int Id)
+		{
+		    var order = orders.Find(x => x.ID == Id);
+		    if (order == null)
+		    {
+			return NotFound();
+		    }
+		    else
+		    {
+			orders.Remove(order);
+			return NoContent();
+		    }
+		}
+		
+		[HttpPut]
+		public ActionResult Update(Order modifyOrder)
+		{
+		    var doesOrderExist = orders.Find(x => x.ID == modifyOrder.ID);
+		    if (doesOrderExist == null)
+		    {
+			return BadRequest("Unable to update; order doesn't exist.");
+		    } 
+		    else
+		    {
+			doesOrderExist.customerName = modifyOrder.customerName;
+			return Ok();
 		    }
 		}
 	}
