@@ -35,8 +35,7 @@ namespace CSharp.Controllers
 		    else
 		    {
 			orders.Add(newOrder);
-			var resourceUrl = Request.Path.ToString() + '/' + newOrder.ID;
-			return Created(resourceUrl, newOrder);
+			return "Success";
 		    }
 		}
 		
@@ -53,7 +52,7 @@ namespace CSharp.Controllers
 		    else
 		    {
 			orders.Remove(order);
-			return NoContent();
+			return "Success";
 		    }
 		}
 		
@@ -68,7 +67,7 @@ namespace CSharp.Controllers
 		    else
 		    {
 			doesOrderExist.customerName = modifyOrder.customerName;
-			return Ok();
+			return "Success";
 		    }
 		}
 	}
