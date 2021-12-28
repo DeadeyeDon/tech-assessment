@@ -30,7 +30,7 @@ namespace CSharp.Controllers
 		    var doesOrderExist = orders.Find(x => x.ID == newOrder.ID)
 		    if (doesOrderExist != null)
 		    {
-			return Conflict("Order already exists.");
+			return "Order already exists.";
 		    }
 		    else
 		    {
@@ -47,7 +47,7 @@ namespace CSharp.Controllers
 		    var order = orders.Find(x => x.ID == Id);
 		    if (order == null)
 		    {
-			return NotFound();
+			return "Order not found";
 		    }
 		    else
 		    {
@@ -62,7 +62,7 @@ namespace CSharp.Controllers
 		    var doesOrderExist = orders.Find(x => x.ID == modifyOrder.ID);
 		    if (doesOrderExist == null)
 		    {
-			return BadRequest("Unable to update; order doesn't exist.");
+			return "Unable to update; order doesn't exist.";
 		    } 
 		    else
 		    {
